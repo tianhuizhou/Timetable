@@ -1,0 +1,45 @@
+annealing simulated algorithm.
+/*
+* T： the temperature of system, the initial T should be a high temperature
+* T_min ：the floor of the system temperature, when T reachs the T_min, then we stop searching
+* r： a factor to control the speed of cool down
+* C(i): the current state of the timetable
+* C(i+1): the new state of the timetable
+* J(y)：the cost of the state y of the timetable
+* increase_max = 0;
+* increase = 0;
+* dCost: change in cost
+* max_swap: the number of max swaps
+* cur_swap = 0
+*/
+
+while(T > T_min){
+    while(cur_swap < max_swap){
+        dCost = J( C(i+1) ) - J( C(i) );
+        
+        if(dCost<=0)//after move it, we get a better solution, so we always accept the move
+            C(i+1) = C(i) ; //accept the move from C(i) to C(i+1)
+            increase++;
+        else
+        {
+        //if we don't get a better solution or even make it worse, we accept the move by some probability. The probability should decrease as time goes on.
+            
+        // the range of the function exp(dE/T) is (0,1), if dE/T goes up, the exp(dE/T) also increase.
+        if ( exp( dCost/T ) > random( 0 , 1 ) )
+        C(i+1) = C(i) ; //accept the move from Y(i) to Y(i+1)
+        increase++;
+        }
+        if(increase == increase_max){
+            increase = 0;
+            cur_swap = 0;
+            break;
+        }
+        i++;
+        cur_swap++;
+    }//ends while
+    
+    T = r * T ; //decrease the temperature,0<r<1.
+    　　/*
+    　　* if r is too big, we will have a high probability to get the optimization of whole picture, but it gonna take a long time. If r is too small, the process of searching will be really fast, but we might just get a partial optimization
+    　　*/
+}//ends while

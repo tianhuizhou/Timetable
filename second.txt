@@ -1,0 +1,67 @@
+The second part
+Monte Carlo 
+randomly pick up a course and randomly move around to see if the cost reduce or not 
+if the cost reduces, then we move forward.
+if the cost does not change or even great, undo it.
+the condition of ends the loop is: the cost does not reduce in many times, we stop doing Monte Carlo, return the current solution and consider that's the best solution for now we can get.
+
+
+unincrease = 0;
+set up the maximum number of unincrease: max_unincrease;
+Number of iteration: i;
+The number of maximum iteration: Max_Iter;
+
+The map: classTable;
+The schedule: schedule;
+The total cost: cost;
+The changes of cost: dif_cost = 0; // we do the movement when dif_cost greater than 0.
+
+
+
+while(i<Max_Iter){
+  randomly pick a course: crn_course;
+  So we get the teacher number for the course: index_teacher;
+  read the loc&time from the map: loc_tem, time_tem;
+
+  get two random numbers: row_tem and col_tem;
+
+  if(schedule[time_tem][loc_tem]>1){//there is class clash on time&room
+       if(schedule[row_tem][col_tem]==0){
+	dif_cost++;
+	} 
+ }else{// there no class clash on time&room
+      if(schedule[row_tem][col_tem] > 0){
+	dif_cost--;
+	}
+ }
+
+  if(schedule2[time_tem][index_teacher]>1){// there is a clash about time&tec
+	if(schedule2[row_tem][index_teacher]==0){
+ 		dif_cost++;
+	}
+ }else{//there no class clash about time&tec
+      if(schedule2[row_tem][index_teacher] > 0){
+	dif_cost--;
+	}
+}
+
+  if(dif_cost > 0){// accept the move
+	schedule[time_tem][loc_tem]--;
+           schedule[row_tem][col_tem]++;
+	schedule2[time_tem][teacher]--;
+	schedule2[row_tem][index_teacher]++;
+	cost = cost - dif_cost;
+	(row_tem,col_tem) -> classTable[crn_course];
+	unincrease = 0;
+	}
+
+  }
+  else{
+      unincrease++;
+    }
+  
+  if(unincrease == max_unincrease) break;
+  if(cost==0) break;
+  i++;
+}
+return classTable, schedule, schedule2, and cost;

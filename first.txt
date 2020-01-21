@@ -1,0 +1,45 @@
+The first part
+randomly generate a sample.
+we just simply make the sample. 
+No user friendly. 
+1. we assume all course take 1 hour
+
+The total times of iteration, which depends on how many course we have: T;
+The number of current iteration: i;
+The number of class clash: cost;
+
+using map in C++ to hold class/location/time: 
+  map<int, map<int,int>> classTable;
+  map<int,map<int,int>> ::iterator it1;
+  map< int, int >::iterator it2;
+
+using a 2D vector for count the class clash of room & time:
+ vector<vector<int>> schedule;
+the row means time: row_max, which means the last avaliable time can start for a course
+the column means location of the classroom: col_max, which means the number of classrooms we have at most
+
+using a 2D vector for count the class clash of teacher & time
+ vector<vector<int>> schedule2;
+the row means time: row2_max, which means the last avaliable time can start for a course
+the column means teacher who teach a course at this time: col2_max, which means the last number of teachers 
+
+**	assume we can get the number of a teacher once we know the CRN of a course        **
+
+
+while(i<T){
+  pick a course that need to be schedule: crn_course;
+  so we get the number of the teacher: index_teacher; // each crn_course have their own teacher numbers
+  get a random number from (0, row_max): row_tem; 
+  get a random number from (0, col_max): col_tem;
+  make a temp map for holding the random time and location: map<int,int> time_loc;
+  
+  time_loc[row_tem] = col_tem; 
+  classTable[crn_course] = time_loc;
+  schedule[row_tem][col_tem]++; // at this time, the room gonna hold the course
+  schedule2[row_tem][index_teacher]++; // at this time, the teacher gonna teach the course
+
+  if(schedule[row_tem][col_tem]>1) cost++;
+  if(schedule2[row_tem][index_teacher]>1) cost++;
+  i++;
+}
+return classTable, schedule, schedule2, and cost;
